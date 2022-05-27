@@ -14,20 +14,29 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-async function run(){
-    try{
-        await client.connect();
-        const productCollection=client.db('tools').collection('services');
-        app.get('/service', async(req, res)=>{
-            const query={};
-            const cursor = productCollection.find(query);
-            const services=await cursor.toArray();
-            res.send(services);
-        })
-    }
-    finally{
+async function run() {
+  try {
+    await client.connect();
+    const productCollection = client.db('tools').collection('services');
+    app.get('/service', async (req, res) => {
+      const query = {};
+      const cursor = productCollection.find(query);
+      const services = await cursor.toArray();
+      res.send(services);
+    }),
 
-    }
+      await client.connect();
+    const reviewCollection = client.db('tools').collection('reviews');
+    app.get('/review', async (req, res) => {
+      const query = {};
+      const cursor = reviewCollection.find(query);
+      const reviews = await cursor.toArray();
+      res.send(reviews);
+    })
+  }
+  finally {
+
+  }
 }
 run().catch(console.dir)
 
